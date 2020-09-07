@@ -1,0 +1,92 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" type="text/css" href="{% static 'todo/style.css' %}">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+</head>
+
+<body>
+
+<div class="navbar navbar-light bg-light">
+    <a class="navbar-brand" href="{% url 'todo:index' %}">
+    <img src="{% static 'todo/logo.ico' %}" width="30" height="30" alt="">
+    </a>
+    <a class="navbar-brand mx-auto" href="{% url 'todo:index' %}">TO-DO</a>
+</div>
+
+<div class="container">
+    <div class="row">
+        <div class="col mt-4 mb-4">
+            <form action="{% url 'todo:add task' %}" method="post">
+                {% csrf_token %}
+                <div class="input-group input-group-lg">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text" id="inputGroup-sizing-default">Let's Go!!!</span>
+                    </div>
+                    {{ task_form.text }}
+
+                </div>
+                <div class="input-group input-group-lg">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text" id="inputGroup-sizing-default">describe that🤔🤔🤔</span>
+                    </div>
+                    {{ task_form.description }}
+                    <button type="submit" class="btn btn-info" >Add Task </button>
+                </div>
+
+
+
+            </form>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-12 col-md-6">
+            <a href="{% url 'todo:delete done' %}">
+                    <button type="submit" class="btn btn-success btn-lg" > Delete Completed Tasks </button>
+            </a>
+            <a href="{% url 'todo:delete all' %}">
+                <button type="submit" class="btn btn-danger btn-lg" > Delete All Tasks </button>
+            </a>
+        </div>
+    </div>
+</div>
+
+{% if tasks %}
+<div class="row mt-3 mx-5">
+        {% for task in tasks %}
+        <div class="col-md-2">
+            <div class="card text-center">
+
+                {%  if task.done %}
+                    <div class="card-header bg-info">
+                    Done Great Job
+                    </div>
+                {% else %}
+                    <div class="card-header">
+                        <a href="{% url 'todo:task done' task.id %}"> done? </a>
+                    </div>
+
+                {% endif %}
+
+                <div class="card-body">
+                    <h5 class="card-title">{{ task.text }}.</h5>
+                    <p class="card-text">{{ task.description }}</p>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+</div>
+
+
+{% else %}
+    <p> Woo Hoo! No tasks to perform. </p>
+{% endif %}
+
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
+
+</body>
+</html>
